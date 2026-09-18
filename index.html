@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div class="phone">
+
+    <!-- TELA DE CARREGAMENTO -->
+    <section id="carregando" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fa-solid fa-seedling"></i>
+            </div>
+            <h1>Elos</h1>
+            <p>Conectando você a quem precisa</p>
+            <div class="loading-bar"><span></span></div>
+        </div>
+    </section>
+
+    <!-- TELA DE AUTENTICAÇÃO -->
+    <section id="auth" class="auth-screen hidden">
+        <div class="auth-brand">
+            <div class="logo-auth"><i class="fa-solid fa-seedling"></i></div>
+            <h1>Elos</h1>
+            <p>Conectando você a quem precisa</p>
+        </div>
+
+        <div id="auth-choice" class="auth-panel">
+            <h2>Bem-vindo!</h2>
+            <p class="muted">Como você deseja entrar no Elos?</p>
+            <label>Tipo de usuário</label>
+            <select id="choice-role">
+                <option value="">Selecione...</option>
+                <option value="aluno">Aluno</option>
+                <option value="professor">Professor</option>
+                <option value="instituicao">Instituição</option>
+            </select>
+            <button class="primary full" id="go-login">Já tenho cadastro</button>
+            <button class="secondary full" id="go-register">Criar cadastro</button>
+        </div>
+
+        <div id="login-panel" class="auth-panel hidden">
+            <button class="back-link" data-auth-back><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+            <h2>Entrar</h2>
+            <p class="muted" id="login-subtitle">Acesse sua conta.</p>
+            <label id="login-name-label">Nome de usuário ou e-mail</label>
+            <input id="login-name" type="text" placeholder="Digite seu nome ou e-mail">
+            <label>Senha</label>
+            <input id="login-password" type="password" placeholder="Digite sua senha">
+            <button class="primary full" id="login-submit">Entrar</button>
+            <p class="auth-error" id="login-error"></p>
+        </div>
+
+        <div id="register-panel" class="auth-panel hidden">
+            <button class="back-link" data-auth-back><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+            <div class="step-head">
+                <span id="register-role-badge">Cadastro</span>
+                <span id="register-step">1 de 2</span>
+            </div>
+            <div id="register-step-1"></div>
+            <div id="register-step-2" class="hidden"></div>
+            <button class="primary full" id="register-next">Continuar</button>
+            <p class="auth-error" id="register-error"></p>
+        </div>
+    </section>
+
+    <!-- APLICAÇÃO PRINCIPAL -->
+    <div class="app hidden" id="app">
+
+        <!-- CABEÇALHO -->
+        <header>
+            <div class="brand">
+                <div class="avatar-mini-wrap" id="avatar-mini-container">
+                    <div class="profile-avatar-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                </div>
+                <h1>Elos</h1>
+            </div>
+
+            <div class="icons">
+                <button class="icon-btn" id="btn-buscar" aria-label="Buscar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="icon-btn" id="btn-notifications" aria-label="Notificações">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot hidden"></span>
+                </button>
+                <button class="icon-btn" id="btn-menu" aria-label="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- BUSCA -->
+        <div class="busca-container" id="busca-container">
+            <div class="busca-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="campo-busca" placeholder="Buscar atividades...">
+                <button id="fechar-busca" aria-label="Fechar busca">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="resultados-busca" class="resultados-busca-container"></div>
+        </div>
+
+        <!-- MENU DROPDOWN -->
+        <div class="menu-dropdown" id="menu-dropdown">
+            <button data-menu-tela="aluno-inicio">
+                <i class="fa-solid fa-house"></i> Início
+            </button>
+            <button data-menu-tela="aluno-calendario">
+                <i class="fa-regular fa-calendar"></i> Meu calendário
+            </button>
+            <button data-menu-tela="aluno-ranking">
+                <i class="fa-regular fa-star"></i> Ranking
+            </button>
+            <button data-menu-tela="aluno-perfil">
+                <i class="fa-regular fa-user"></i> Meu perfil
+            </button>
+            <button id="btn-logout" style="color: #b33a35;">
+                <i class="fa-solid fa-right-from-bracket" style="color: #b33a35;"></i> Sair da conta
+            </button>
+        </div>
+
+        <main>
+            <!-- PAINEL ALUNO -->
+            <section id="aluno-inicio" class="screen role-screen active">
+                <div class="welcome">
+                    <h2>Olá, <span data-user-name>Rodrigo</span>!</h2>
+                    <p>Pronto para fazer a diferença hoje? Existem novas campanhas na sua região.</p>
+                </div>
+
+                <div class="section-title">
+                    <h3>Oportunidades próximas</h3>
+                    <a href="#" class="ver-todas" id="ver-todas">Ver todas</a>
+                </div>
+                <div class="cards" id="cards-oportunidades"></div>
+
+                <div class="section-title">
+                    <h3>Campanhas em destaque</h3>
+                </div>
+                <div class="destaque-campanha" id="campanha-destaque"></div>
+            </section>
+
+            <section id="aluno-todas" class="screen">
+                <div class="pagina-header">
+                    <button class="voltar-btn" id="voltar-inicio">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h2>Todas as oportunidades</h2>
+                </div>
+                <div class="lista-oportunidades" id="lista-oportunidades"></div>
+            </section>
+
+            <section id="aluno-calendario" class="screen">
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h2 id="mes-ano">Setembro 2026</h2>
+                        <div class="calendar-nav">
+                            <button id="mes-anterior" aria-label="Mês anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button id="mes-seguinte" aria-label="Próximo mês"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="week-labels">
+                        <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+                    </div>
+                    <div class="calendar" id="grade-calendario"></div>
+                </div>
+                <h3 class="lista-titulo">Minhas inscrições</h3>
+                <div id="lista-eventos"></div>
+            </section>
+
+            <section id="aluno-ranking" class="screen">
+                <h2 class="ranking-titulo">Ranking</h2>
+                <div class="tabs">
+                    <button class="tab active" data-tab="alunos">Alunos</button>
+                    <button class="tab" data-tab="salas">Salas</button>
+                </div>
+
+                <div id="ranking-alunos" class="tab-panel active">
+                    <div class="podio" id="podio-alunos"></div>
+                    <h3 class="destaques-titulo">Destaques dos Alunos</h3>
+                    <div class="lista-destaques" id="destaques-alunos"></div>
+                </div>
+
+                <div id="ranking-salas" class="tab-panel">
+                    <div class="podio" id="podio-salas"></div>
+                    <h3 class="destaques-titulo">Destaques das Salas</h3>
+                    <div class="lista-destaques" id="destaques-salas"></div>
+                </div>
+            </section>
+
+            <section id="aluno-perfil" class="screen">
+                <div class="profile-card">
+                    <div class="profile-avatar-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <h2 data-user-name>Rodrigo Silva</h2>
+                    <p data-user-email>rodrigo@email.com</p>
+
+                    <div class="stats">
+                        <div>
+                            <strong id="profile-points">125</strong>
+                            <span>Pontos</span>
+                        </div>
+                        <div>
+                            <strong id="profile-campaigns">0</strong>
+                            <span>Campanhas</span>
+                        </div>
+                        <div>
+                            <strong id="profile-favorites">3</strong>
+                            <span>Favoritas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-edit-section">
+                        <h3>Editar Perfil</h3>
+                        <div class="field"><label>Nome</label><input type="text" id="edit-aluno-name"></div>
+                        <div class="field"><label>E-mail</label><input type="email" id="edit-aluno-email"></div>
+                        <button class="primary full" id="btn-save-aluno-profile">Salvar Alterações</button>
+                        <button class="danger-btn full" id="btn-delete-aluno-account">Excluir Conta</button>
+                    </div>
+                </div>
+                <h3 class="lista-titulo">Minhas conquistas</h3>
+                <div class="conquistas" id="lista-conquistas"></div>
+            </section>
+
+            <!-- PAINEL PROFESSOR -->
+            <section id="professor-inicio" class="screen role-screen">
+                <div class="welcome">
+                    <h2>Olá, Prof. <span data-user-name></span>!</h2>
+                    <p>Acompanhe suas turmas, participe de campanhas e incentive seus alunos.</p>
+                </div>
+
+                <div class="calendar-card" style="margin-top:16px;">
+                    <div class="section-title" style="margin-top:0;">
+                        <h3>Selecione suas turmas</h3>
+                    </div>
+                    <p style="font-size:12px; color:var(--texto-suave); margin-bottom:12px;">Escolha as turmas que você acompanha:</p>
+                    <div id="teacher-class-selector" class="class-selector-grid"></div>
+                </div>
+
+                <div class="section-title">
+                    <h3>Minhas turmas</h3>
+                </div>
+                <div id="teacher-classes"></div>
+
+                <div class="section-title">
+                    <h3>Campanhas disponíveis</h3>
+                    <a href="#" class="ver-todas" id="ver-todas-professor">Ver todas</a>
+                </div>
+                <div class="cards" id="teacher-cards"></div>
+            </section>
+
+            <section id="professor-grafico" class="screen">
+                <h2 class="ranking-titulo">Participação das Salas</h2>
+                <div class="calendar-card" style="text-align:center;">
+                    <div class="pie-chart" id="teacher-pie"></div>
+                    <div id="teacher-legend" style="text-align:left; margin-top:14px;"></div>
+                    <p style="font-size:11px; color:var(--texto-suave); margin-top:12px;">Panorama geral da participação das salas cadastradas.</p>
+                </div>
+
+                <h3 class="lista-titulo">Campanhas em andamento</h3>
+                <div id="teacher-campaigns-list"></div>
+            </section>
+
+            <section id="professor-perfil" class="screen">
+                <div class="profile-card">
+                    <div class="profile-avatar-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <h2 data-user-name>Professor</h2>
+                    <p data-user-email>professor@escola.com</p>
+                    <div class="profile-info" id="teacher-info"></div>
+                    
+                    <div class="profile-edit-section">
+                        <h3>Editar Perfil</h3>
+                        <div class="field"><label>Nome</label><input type="text" id="edit-prof-name"></div>
+                        <div class="field"><label>E-mail</label><input type="email" id="edit-prof-email"></div>
+                        <button class="primary full" id="btn-save-prof-profile">Salvar Alterações</button>
+                        <button class="danger-btn full" id="btn-delete-prof-account">Excluir Conta</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAINEL INSTITUIÇÃO -->
+            <section id="instituicao-inicio" class="screen role-screen">
+                <div class="welcome">
+                    <span style="font-size:10px; font-weight:800; opacity:0.8; letter-spacing:0.8px;">PAINEL DA INSTITUIÇÃO</span>
+                    <h2 data-user-name>Nome da Instituição</h2>
+                    <p>Crie campanhas sociais e acompanhe quem está participando.</p>
+                </div>
+
+                <div class="section-title">
+                    <h3>Minhas campanhas</h3>
+                </div>
+                <div id="institution-campaigns"></div>
+
+                <button class="fab" id="btn-nova-campanha" aria-label="Nova Campanha">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </section>
+
+            <section id="instituicao-participantes" class="screen">
+                <h2 class="ranking-titulo">Participantes</h2>
+                <p style="font-size:12px; color:var(--texto-suave); margin-bottom:14px;">Controle de inscritos nas suas campanhas:</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Turma</th>
+                                <th>Campanha</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participants-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="instituicao-perfil" class="screen">
+                <div class="profile-card">
+                    <div class="profile-avatar-icon"><i class="fa-solid fa-building"></i></div>
+                    <h2 data-user-name>Instituição</h2>
+                    <p data-user-email>contato@instituicao.org</p>
+                    <div class="profile-info" id="institution-info"></div>
+
+                    <div class="profile-edit-section">
+                        <h3>Editar Perfil</h3>
+                        <div class="field"><label>Nome</label><input type="text" id="edit-inst-name"></div>
+                        <div class="field"><label>E-mail</label><input type="email" id="edit-inst-email"></div>
+                        <button class="primary full" id="btn-save-inst-profile">Salvar Alterações</button>
+                        <button class="danger-btn full" id="btn-delete-inst-account">Excluir Conta</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <nav id="bottom-nav"></nav>
+
+    </div>
+
+    <!-- MODAL PRINCIPAL -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-sheet" id="modal-sheet">
+            <div class="modal-handle"></div>
+            <button class="modal-close" id="modal-close" aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE NOTIFICAÇÕES -->
+    <div class="modal-overlay" id="notification-overlay">
+        <div class="modal-sheet" style="padding:20px;">
+            <div class="modal-handle"></div>
+            <button class="modal-close" id="notification-close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size:18px;">Notificações</h3>
+                <button id="btn-clear-notifications" class="danger-btn" style="padding: 6px 12px; font-size: 11px; margin: 0;">Limpar</button>
+            </div>
+            <div id="notifications-list"></div>
+        </div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
