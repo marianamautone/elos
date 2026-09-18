@@ -28,7 +28,7 @@ const seed = {
             phone: "(11) 96371 3389",
             points: 125
         },
-       {
+        {
             role: "aluno",
             name: "Luiza Costa",
             email: "luizacosta@gmail.com",
@@ -39,7 +39,7 @@ const seed = {
             phone: "(11) 99999-1111",
             points: 125
         },
-       {
+        {
             role: "aluno",
             name: "Felipe Almeida",
             email: "felipealmeida@gmail.com",
@@ -50,7 +50,7 @@ const seed = {
             phone: "(11) 99999-1111",
             points: 125
         },
-       {
+        {
             role: "aluno",
             name: "Julia Peres",
             email: "juliaperes@gmail.com",
@@ -129,7 +129,7 @@ const seed = {
             turma: "3º EM",
             age: "17"
         },
-       {
+        {
             campaignId: 3,
             userEmail: "luizacosta@gmail.com",
             title: "Coleta de Agasalhos",
@@ -170,20 +170,19 @@ const seed = {
 
 let db = JSON.parse(localStorage.getItem(KEY) || "null");
 
-// Se o banco não existir ou a lista de usuários estiver vazia, carrega o seed
 if (!db || !db.users || db.users.length === 0) {
     db = seed;
 } else {
-    // Garante que cada usuário do seed esteja dentro do banco
     seed.users.forEach(demoUser => {
-        const existe = db.users.some(u => u.email === demoUser.email && u.role === demoUser.role);
-        if (!existe) {
+        const index = db.users.findIndex(u => u.email === demoUser.email && u.role === demoUser.role);
+        if (index !== -1) {
+            db.users[index] = demoUser;
+        } else {
             db.users.push(demoUser);
         }
     });
 }
 
-// Corrige datas antigas para Setembro
 if (db && db.campaigns) {
     db.campaigns.forEach(c => {
         if (c.date) c.date = c.date.replace(/-01-/, "-09-");
@@ -191,14 +190,6 @@ if (db && db.campaigns) {
 }
 
 localStorage.setItem(KEY, JSON.stringify(db));
-
-// Atualiza campanhas com imagens antigas ou datas antigas caso já estejam gravadas no LocalStorage
-db.campaigns = db.campaigns.map(c => {
-    if (c.date && c.date.startsWith("2026-01")) {
-        c.date = c.date.replace("2026-01", "2026-09");
-    }
-    return c;
-});
 
 let current = null;
 let currentRole = "aluno";
@@ -239,7 +230,7 @@ const conquistas = [
 ];
 
 const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-let mesAtual = 8; // Setembro (índice 8)
+let mesAtual = 8;
 let anoAtual = 2026;
 
 /* =========================================================
@@ -359,7 +350,6 @@ function startApp() {
     buildNav();
     renderAll();
 
-    // Redireciona para a tela inicial correta do perfil atual
     const initialScreen = currentRole === "aluno" ? "aluno-inicio" : 
                           currentRole === "professor" ? "professor-inicio" : 
                           "instituicao-inicio";
@@ -479,7 +469,7 @@ function renderHome() {
     if (cardsEl) {
         cardsEl.innerHTML = db.campaigns.map(op => `
             <div class="card" data-campaign-id="${op.id}">
-                <img src="${op.img}" alt="${op.title}">
+                ${op.img ? `<img src="${op.img}" alt="${op.title}">` : ''}
                 <div class="card-body">
                     <h4>${op.title}</h4>
                     <div class="meta"><i class="fa-regular fa-clock"></i> ${op.time}</div>
@@ -494,7 +484,7 @@ function renderHome() {
         const c = db.campaigns.find(item => item.id === 3) || db.campaigns[0];
         destaqueEl.setAttribute("data-campaign-id", c.id);
         destaqueEl.innerHTML = `
-            <img src="agasalho.jfif" alt="${c.title}">
+            ${c.img ? `<img src="${c.img}" alt="${c.title}">` : ''}
             <div>
                 <span class="tag">DESTAQUE</span>
                 <h4>${c.title}</h4>
@@ -509,7 +499,7 @@ function renderTodasOportunidades() {
     if (!lista) return;
     lista.innerHTML = db.campaigns.map(op => `
         <div class="oportunidade-item" data-campaign-id="${op.id}">
-            <img src="${op.img}" alt="${op.title}">
+            ${op.img ? `<img src="${op.img}" alt="${op.title}">` : ''}
             <div>
                 <h4>${op.title}</h4>
                 <p><i class="fa-regular fa-clock"></i> ${op.time}</p>
@@ -663,7 +653,7 @@ function renderTeacher() {
 
     $("#teacher-cards").innerHTML = db.campaigns.map(c => `
         <div class="card" data-campaign-id="${c.id}">
-            <img src="${c.img}" alt="${c.title}">
+            ${c.img ? `<img src="${c.img}" alt="${c.title}">` : ''}
             <div class="card-body">
                 <h4>${c.title}</h4>
                 <div class="meta"><i class="fa-regular fa-clock"></i> ${c.time}</div>
@@ -723,8 +713,8 @@ function renderInstitution() {
     const u = selectedUser();
     if (!u) return;
 
-    // Apenas a doação de agasalhos na área da Instituição
-    const myCampaigns = db.campaigns.filter(c => c.id === 3 || c.title.toLowerCase().includes("agasalho"));
+    // Exibe as campanhas criadas por esta instituição ou todas do sistema
+    const myCampaigns = db.campaigns.filter(c => c.institution === u.name || current.role === "instituicao");
 
     $("#institution-campaigns").innerHTML = myCampaigns.length ? myCampaigns.map(c => `
         <div class="event" data-campaign-id="${c.id}">
@@ -735,14 +725,14 @@ function renderInstitution() {
                 <p class="onde">${c.location}</p>
             </div>
         </div>
-    `).join("") : "<p class='muted'>Nenhuma campanha de doação de agasalhos encontrada.</p>";
+    `).join("") : "<p class='muted'>Nenhuma campanha criada ainda. Clique no botão + para criar.</p>";
 
     const participants = db.registrations;
     $("#participants-body").innerHTML = participants.length ? participants.map(r => `
         <tr>
             <td>${r.name || "Aluno"}</td>
             <td>${r.turma || "—"}</td>
-            <td>${r.title || "Doação de Agasalhos"}</td>
+            <td>${r.title || "Campanha"}</td>
             <td>
                 <button class="action-btn-edit" onclick="editarInscricao(${r.campaignId}, '${r.userEmail}')"><i class="fa-solid fa-pen"></i></button>
                 <button class="action-btn-delete" onclick="cancelarInscricao(${r.campaignId}, '${r.userEmail}')"><i class="fa-solid fa-trash"></i></button>
@@ -825,7 +815,7 @@ function abrirModalDetalhes(c) {
         };
     } else {
         $("#modal-content").innerHTML = `
-            <img id="modal-img" src="${c.img || 'agasalho.jfif'}" alt="">
+            ${c.img ? `<img id="modal-img" src="${c.img}" alt="${c.title}">` : ''}
             <div class="modal-body">
                 <span class="modal-tag visivel">OPORTUNIDADE</span>
                 <h3 id="modal-titulo">${c.title}</h3>
@@ -847,10 +837,9 @@ function abrirModalDetalhes(c) {
             btnCta.onclick = () => {
                 const userObj = selectedUser();
                 
-                // 1. Registra a inscrição
                 db.registrations.push({
                     campaignId: c.id,
-                    userEmail: current ? current.email : "rodrigo@email.com",
+                    userEmail: current ? current.email : "rodrigosilva@gmail.com",
                     title: c.title,
                     date: c.date,
                     time: c.time,
@@ -860,7 +849,6 @@ function abrirModalDetalhes(c) {
                     age: userObj ? userObj.age : "17"
                 });
 
-                // 2. ADICIONA A NOTIFICAÇÃO AUTOMÁTICA
                 db.notifications.unshift({
                     id: Date.now(),
                     title: "Inscrição confirmada!",
@@ -877,9 +865,8 @@ function abrirModalDetalhes(c) {
         const btnCancelar = $("#btn-cancelar-inscricao");
         if (btnCancelar) {
             btnCancelar.onclick = () => {
-                cancelarInscricao(c.id, current ? current.email : "rodrigo@email.com");
+                cancelarInscricao(c.id, current ? current.email : "rodrigosilva@gmail.com");
                 
-                // Notificação ao cancelar inscrição
                 db.notifications.unshift({
                     id: Date.now(),
                     title: "Inscrição cancelada",
@@ -906,6 +893,7 @@ function abrirModalNovaCampanha() {
                 <div class="field"><label>Horário</label><input id="new-time" placeholder="08:00 - 12:00"></div>
             </div>
             <div class="field"><label>Local</label><input id="new-location" placeholder="Endereço ou local"></div>
+            <div class="field"><label>Nome do Arquivo de Imagem (Opcional)</label><input id="new-img" placeholder="Ex.: foto.jpg ou agasalho.jfif"></div>
             <div class="field"><label>Pontos</label><input id="new-points" type="number" value="20"></div>
             <div class="field"><label>Descrição</label><textarea id="new-desc" style="height:70px;" placeholder="Breve explicação..."></textarea></div>
             <button class="primary full" id="btn-criar-campanha">Criar Campanha</button>
@@ -917,6 +905,7 @@ function abrirModalNovaCampanha() {
         const date = $("#new-date").value;
         const time = $("#new-time").value.trim();
         const loc = $("#new-location").value.trim();
+        const imgInput = $("#new-img").value.trim();
         const pts = Number($("#new-points").value);
         const desc = $("#new-desc").value.trim();
 
@@ -934,7 +923,7 @@ function abrirModalNovaCampanha() {
             points: pts || 20,
             description: desc || "Nova ação comunitária.",
             institution: u ? u.name : "Instituição",
-            img: "agasalho.jfif"
+            img: imgInput || ""
         });
 
         save();
@@ -963,7 +952,7 @@ function renderNotifications() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ---------- FADE OUT CARREGAMENTO (CORRIGIDO) ---------- */
+    /* ---------- FADE OUT CARREGAMENTO ---------- */
     setTimeout(() => {
         const loader = document.getElementById("carregando");
         const authScreen = document.getElementById("auth");
@@ -1061,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const filtrados = db.campaigns.filter(c => c.title.toLowerCase().includes(termo) || c.location.toLowerCase().includes(termo));
             resultadosBusca.innerHTML = filtrados.map(c => `
                 <div class="busca-item-resultado" data-campaign-id="${c.id}">
-                    <img src="${c.img}" alt="">
+                    ${c.img ? `<img src="${c.img}" alt="">` : ''}
                     <div>
                         <h4>${c.title}</h4>
                         <p>${c.location}</p>
