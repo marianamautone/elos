@@ -28,6 +28,39 @@ const seed = {
             phone: "(11) 96371 3389",
             points: 125
         },
+       {
+            role: "aluno",
+            name: "Luiza Costa",
+            email: "luizacosta@gmail.com",
+            password: "123456",
+            age: "15",
+            turma: "1º HT",
+            rm: "32655",
+            phone: "(11) 99999-1111",
+            points: 125
+        },
+       {
+            role: "aluno",
+            name: "Felipe Almeida",
+            email: "felipealmeida@gmail.com",
+            password: "123456",
+            age: "16",
+            turma: "2º AT",
+            rm: "32656",
+            phone: "(11) 99999-1111",
+            points: 125
+        },
+       {
+            role: "aluno",
+            name: "Julia Peres",
+            email: "juliaperes@gmail.com",
+            password: "123456",
+            age: "16",
+            turma: "1º BM",
+            rm: "32657",
+            phone: "(11) 99999-1111",
+            points: 125
+        },
         {
             role: "professor",
             name: "Carlos Rodrigues",
@@ -36,7 +69,7 @@ const seed = {
             age: "40",
             re: "98765",
             phone: "(11) 99999-2222",
-            turmas: ["1º EM", "2º EM", "3º EM"]
+            turmas: ["3º EM", "2º GT", "1º HT", "2º AT", "1º BM"]
         },
         {
             role: "instituicao",
@@ -95,6 +128,39 @@ const seed = {
             name: "Rodrigo Silva",
             turma: "3º EM",
             age: "17"
+        }
+       {
+            campaignId: 3,
+            userEmail: "luizacosta@gmail.com",
+            title: "Coleta de Agasalhos",
+            date: "2026-09-25",
+            time: "08:00 - 12:00",
+            location: "ETEC Jorge Street",
+            name: "Luiza Costa",
+            turma: "1º HT",
+            age: "15"
+        },
+        {
+            campaignId: 1,
+            userEmail: "felipealmeida@gmail.com",
+            title: "Reflorestar floresta",
+            date: "2026-09-12",
+            time: "08:00 - 12:00",
+            location: "Parque Ecológico Estadual",
+            name: "Felipe Almeida",
+            turma: "2º AT",
+            age: "16"
+        },
+        {
+            campaignId: 2,
+            userEmail: "juliaperes@gmail.com",
+            title: "Sopa Solidária",
+            date: "2026-09-18",
+            time: "09:00 - 13:00",
+            location: "Banco de Alimentos Municipal",
+            name: "Julia Peres",
+            turma: "1º BM",
+            age: "16"
         }
     ],
     notifications: [
