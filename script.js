@@ -87,7 +87,7 @@ const seed = {
     registrations: [
         {
             campaignId: 3,
-            userEmail: "aluno@elos.com",
+            userEmail: "rodrigosilva@gmail.com",
             title: "Coleta de Agasalhos",
             date: "2026-09-25",
             time: "08:00 - 12:00",
@@ -102,25 +102,28 @@ const seed = {
     ]
 };
 
-let db = JSON.parse(localStorage.getItem(KEY) || "null") || seed;
+let db = JSON.parse(localStorage.getItem(KEY) || "null");
 
-// Força a atualização do mês das campanhas e inscrições salvas no navegador para Setembro (09)
+// Se o banco não existir ou a lista de usuários estiver vazia, carrega o seed
+if (!db || !db.users || db.users.length === 0) {
+    db = seed;
+} else {
+    // Garante que cada usuário do seed esteja dentro do banco
+    seed.users.forEach(demoUser => {
+        const existe = db.users.some(u => u.email === demoUser.email && u.role === demoUser.role);
+        if (!existe) {
+            db.users.push(demoUser);
+        }
+    });
+}
+
+// Corrige datas antigas para Setembro
 if (db && db.campaigns) {
     db.campaigns.forEach(c => {
-        if (c.date) {
-            c.date = c.date.replace(/-01-/, "-09-");
-        }
-    });
-}
-if (db && db.registrations) {
-    db.registrations.forEach(r => {
-        if (r.date) {
-            r.date = r.date.replace(/-01-/, "-09-");
-        }
+        if (c.date) c.date = c.date.replace(/-01-/, "-09-");
     });
 }
 
-// Salva a correção no navegador
 localStorage.setItem(KEY, JSON.stringify(db));
 
 // Atualiza campanhas com imagens antigas ou datas antigas caso já estejam gravadas no LocalStorage
