@@ -128,7 +128,7 @@ const seed = {
             name: "Rodrigo Silva",
             turma: "3º EM",
             age: "17"
-        }
+        },
        {
             campaignId: 3,
             userEmail: "luizacosta@gmail.com",
