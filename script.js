@@ -75,7 +75,7 @@ const seed = {
             role: "instituicao",
             name: "ETEC Jorge Street",
             email: "e011.sec@etec.sp.gov.br",
-            password: "123",
+            password: "123456",
             cnpj: "62.823.257/0007-96",
             area: "Educação",
             responsavel: "Flávio Ferreira Bento",
