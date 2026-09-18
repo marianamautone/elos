@@ -5,7 +5,50 @@
 const KEY = "elos_db_v3";
 
 const seed = {
-    users: [],
+    users: [
+        {
+            role: "aluno",
+            name: "Rodrigo Silva",
+            email: "rodrigosilva@gmail.com",
+            password: "123456",
+            age: "17",
+            turma: "3º EM",
+            rm: "32654",
+            phone: "(11) 99999-1111",
+            points: 125
+        },
+        {
+            role: "aluno",
+            name: "Mariana Mautone",
+            email: "marianamautone@gmail.com",
+            password: "123456",
+            age: "17",
+            turma: "2º GT",
+            rm: "35199",
+            phone: "(11) 96371 3389",
+            points: 125
+        },
+        {
+            role: "professor",
+            name: "Carlos Rodrigues",
+            email: "carlosrodrigues@gmail.com",
+            password: "123456",
+            age: "40",
+            re: "98765",
+            phone: "(11) 99999-2222",
+            turmas: ["1º EM", "2º EM", "3º EM"]
+        },
+        {
+            role: "instituicao",
+            name: "ETEC Jorge Street",
+            email: "e011.sec@etec.sp.gov.br",
+            password: "123",
+            cnpj: "62.823.257/0007-96",
+            area: "Educação",
+            responsavel: "Flávio Ferreira Bento",
+            phone: "(11) 4238-3860"
+        }
+    ],
     campaigns: [
         {
             id: 1,
@@ -41,7 +84,19 @@ const seed = {
             img: "agasalho.jfif"
         }
     ],
-    registrations: [],
+    registrations: [
+        {
+            campaignId: 3,
+            userEmail: "aluno@elos.com",
+            title: "Coleta de Agasalhos",
+            date: "2026-09-25",
+            time: "08:00 - 12:00",
+            location: "ETEC Jorge Street",
+            name: "Rodrigo Silva",
+            turma: "3º EM",
+            age: "17"
+        }
+    ],
     notifications: [
         { id: 1, title: "Bem-vindo ao Elos!", text: "Acompanhe as campanhas disponíveis na sua região." }
     ]
