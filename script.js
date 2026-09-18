@@ -963,53 +963,69 @@ function renderNotifications() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ---------- FADE OUT CARREGAMENTO ---------- */
+    /* ---------- FADE OUT CARREGAMENTO (CORRIGIDO) ---------- */
     setTimeout(() => {
         const loader = document.getElementById("carregando");
+        const authScreen = document.getElementById("auth");
+        
         if (loader) {
             loader.classList.add("fade-out");
-            setTimeout(() => loader.classList.add("hidden"), 600);
+            setTimeout(() => {
+                loader.classList.add("hidden");
+                if (authScreen) authScreen.classList.remove("hidden");
+            }, 600);
+        } else if (authScreen) {
+            authScreen.classList.remove("hidden");
         }
-        $("#auth").classList.remove("hidden");
-    }, 1800);
+    }, 1200);
 
     /* ---------- AUTENTICAÇÃO ---------- */
-    $("#go-login").onclick = () => {
-        currentRole = $("#choice-role").value;
-        if (!currentRole) { alert("Selecione o tipo de usuário."); return; }
-        $("#login-subtitle").textContent = `Entre como ${roleName(currentRole)}.`;
-        showAuthPanel("login-panel");
-    };
+    const goLogin = $("#go-login");
+    if (goLogin) {
+        goLogin.onclick = () => {
+            currentRole = $("#choice-role").value;
+            if (!currentRole) { alert("Selecione o tipo de usuário."); return; }
+            $("#login-subtitle").textContent = `Entre como ${roleName(currentRole)}.`;
+            showAuthPanel("login-panel");
+        };
+    }
 
-    $("#go-register").onclick = () => {
-        currentRole = $("#choice-role").value;
-        if (!currentRole) { alert("Selecione o tipo de usuário."); return; }
-        regStep = 1;
-        regData = {};
-        buildRegister();
-        showAuthPanel("register-panel");
-    };
+    const goRegister = $("#go-register");
+    if (goRegister) {
+        goRegister.onclick = () => {
+            currentRole = $("#choice-role").value;
+            if (!currentRole) { alert("Selecione o tipo de usuário."); return; }
+            regStep = 1;
+            regData = {};
+            buildRegister();
+            showAuthPanel("register-panel");
+        };
+    }
 
     document.querySelectorAll("[data-auth-back]").forEach(b => {
         b.onclick = () => showAuthPanel("auth-choice");
     });
 
-    $("#login-submit").onclick = login;
+    const loginSubmit = $("#login-submit");
+    if (loginSubmit) loginSubmit.onclick = login;
 
-    $("#register-next").onclick = () => {
-        try {
-            if (regStep === 1) {
-                regData = collectFirst();
-                regStep = 2;
-                buildRegister();
-            } else {
-                finishRegister();
+    const registerNext = $("#register-next");
+    if (registerNext) {
+        registerNext.onclick = () => {
+            try {
+                if (regStep === 1) {
+                    regData = collectFirst();
+                    regStep = 2;
+                    buildRegister();
+                } else {
+                    finishRegister();
+                }
+                $("#register-error").textContent = "";
+            } catch (err) {
+                $("#register-error").textContent = err.message;
             }
-            $("#register-error").textContent = "";
-        } catch (err) {
-            $("#register-error").textContent = err.message;
-        }
-    };
+        };
+    }
 
     /* ---------- BUSCA ---------- */
     const btnBuscar = $("#btn-buscar");
@@ -1107,7 +1123,8 @@ document.addEventListener("DOMContentLoaded", () => {
         abrirModalNovaCampanha();
     });
 
-    $("#modal-close").onclick = fecharModal;
+    const modalClose = $("#modal-close");
+    if (modalClose) modalClose.onclick = fecharModal;
 
     /* ---------- NAVEGAÇÃO DE CONTEÚDO ---------- */
     $("#ver-todas")?.addEventListener("click", e => {
